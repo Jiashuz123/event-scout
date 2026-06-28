@@ -16,10 +16,15 @@ import {
   scoutApplicants,
 } from "@/app/_data/mock";
 import {
-  clearDemoCoverageRequests,
+  clearDemoData,
   formatRequestDate,
+  getBookingStatusLabel,
+  getDemoBookings,
   getDemoCoverageRequests,
+  getDemoScoutApplications,
   getStatusLabel,
+  type DemoBooking,
+  type DemoScoutApplication,
   type CoverageRequest,
 } from "@/app/_lib/demo-store";
 
@@ -35,12 +40,28 @@ function statusTone(status: CoverageRequest["status"]) {
   return "blue";
 }
 
+function bookingTone(status: DemoBooking["status"]) {
+  if (status === "accepted") {
+    return "green";
+  }
+
+  if (status === "revision_requested") {
+    return "amber";
+  }
+
+  return "blue";
+}
+
 export default function InvestorDashboard() {
   const [demoRequests, setDemoRequests] = useState<CoverageRequest[]>([]);
+  const [applications, setApplications] = useState<DemoScoutApplication[]>([]);
+  const [bookings, setBookings] = useState<DemoBooking[]>([]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setDemoRequests(getDemoCoverageRequests());
+      setApplications(getDemoScoutApplications());
+      setBookings(getDemoBookings());
     }, 0);
 
     return () => window.clearTimeout(timer);
@@ -50,10 +71,15 @@ export default function InvestorDashboard() {
     () => [...demoRequests, ...activeCoverageRequests],
     [demoRequests],
   );
+  const pendingApplications = applications.filter(
+    (application) => application.status === "pending",
+  );
 
   function handleClearDemoData() {
-    clearDemoCoverageRequests();
+    clearDemoData();
     setDemoRequests([]);
+    setApplications([]);
+    setBookings([]);
   }
 
   return (
@@ -66,7 +92,11 @@ export default function InvestorDashboard() {
           <button
             type="button"
             onClick={handleClearDemoData}
-            disabled={demoRequests.length === 0}
+            disabled={
+              demoRequests.length === 0 &&
+              applications.length === 0 &&
+              bookings.length === 0
+            }
             className="rounded-full border border-slate-700 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Clear demo data
@@ -84,14 +114,14 @@ export default function InvestorDashboard() {
           detail={`${demoRequests.length} saved in this browser and ${activeCoverageRequests.length} mock requests.`}
         />
         <StatCard
-          label="Scout applicants"
-          value="10"
-          detail="Three shortlisted profiles are ready for investor review."
+          label="Pending applications"
+          value={String(pendingApplications.length)}
+          detail="Browser-saved scout applications waiting for investor review."
         />
         <StatCard
-          label="Recent structured reports"
-          value={String(recentReports.length)}
-          detail="Reports include founder leads, permitted media, and follow-up recommendations."
+          label="Confirmed bookings"
+          value={String(bookings.length)}
+          detail="Accepted applications become booking workspaces in localStorage."
         />
       </div>
 
@@ -165,6 +195,53 @@ export default function InvestorDashboard() {
             <p className="font-semibold">No coverage requests to show.</p>
             <p className="mt-2 text-sm text-slate-400">
               Create a coverage request to start the demo workflow.
+            </p>
+          </Card>
+        )}
+      </section>
+
+      <section className="mt-10">
+        <SectionTitle eyebrow="Bookings" title="Confirmed bookings" />
+        {bookings.length > 0 ? (
+          <div className="grid gap-5 md:grid-cols-2">
+            {bookings.map((booking) => (
+              <Card key={booking.id}>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <p className="text-sm text-slate-400">{booking.city}</p>
+                    <h3 className="mt-2 text-xl font-bold">
+                      <Link
+                        href={`/bookings/${booking.id}`}
+                        className="hover:text-slate-300"
+                      >
+                        {booking.eventName}
+                      </Link>
+                    </h3>
+                  </div>
+                  <Badge tone={bookingTone(booking.status)}>
+                    {getBookingStatusLabel(booking.status)}
+                  </Badge>
+                </div>
+                <dl className="mt-5 grid gap-3 text-sm text-slate-400">
+                  <div>Scout: {booking.scoutName}</div>
+                  <div>Date: {formatRequestDate(booking.date)}</div>
+                  <div>Budget: {booking.budget}</div>
+                </dl>
+                <Link
+                  href={`/bookings/${booking.id}`}
+                  className="mt-6 inline-flex rounded-full border border-slate-700 px-5 py-3 text-sm font-semibold hover:bg-slate-800"
+                >
+                  Open workspace
+                </Link>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <p className="font-semibold">No confirmed bookings yet.</p>
+            <p className="mt-2 text-sm text-slate-400">
+              Accept a pending scout application from a request detail page to
+              create a booking workspace.
             </p>
           </Card>
         )}

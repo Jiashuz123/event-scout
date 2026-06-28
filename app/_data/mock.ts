@@ -114,27 +114,55 @@ export const recentReports = [
   },
 ];
 
-export const openScoutRequests = [
+export const openScoutRequests: CoverageRequest[] = [
+  activeCoverageRequests[0],
   {
-    title: "AI Infrastructure Demo Night",
-    city: "San Francisco",
-    date: "July 16, 2026",
-    fee: "$650",
-    fit: "Best for scouts who can evaluate developer tools and technical founder claims.",
-  },
-  {
+    id: "mock-pre-seed-robotics-showcase",
     title: "Pre-seed Robotics Showcase",
+    eventName: "Pre-seed Robotics Showcase",
+    eventUrl: "https://example.com/pre-seed-robotics-showcase",
     city: "Boston",
-    date: "July 29, 2026",
-    fee: "$700",
-    fit: "Needs concise hardware observations, team signals, and permitted booth media.",
+    venue: "Kendall Hardware Lab",
+    date: "2026-07-29",
+    budget: "$700 fixed fee",
+    status: "open",
+    missionBrief:
+      "Evaluate early robotics teams for technical credibility, customer pull, and ability to ship hardware on tight cycles.",
+    targetPeople:
+      "Robotics founders, technical leads, hardware operators, and demo table organizers.",
+    targetCompanies:
+      "Pre-seed robotics startups working on warehouse automation, inspection, defense-adjacent tools, and manufacturing workflows.",
+    deliverables:
+      "Structured report, team signal summary, 5 founder profiles, permitted media, and recommended investor follow-ups.",
+    permittedMediaNotes:
+      "Ask before photographing prototypes, demo rigs, or screens. Do not capture private customer discussions.",
+    createdAt: "2026-06-24T15:00:00.000Z",
+    applicants: 0,
+    source: "mock",
   },
   {
+    id: "mock-b2b-saas-operator-summit",
     title: "B2B SaaS Operator Summit",
+    eventName: "B2B SaaS Operator Summit",
+    eventUrl: "https://example.com/b2b-saas-operator-summit",
     city: "Austin",
-    date: "August 8, 2026",
-    fee: "$550",
-    fit: "Track category leaders, pricing patterns, and founder follow-up openings.",
+    venue: "Capital Factory",
+    date: "2026-08-08",
+    budget: "$550 fixed fee",
+    status: "open",
+    missionBrief:
+      "Track operator-led SaaS companies with durable workflow pain, expansion potential, and clear buyer urgency.",
+    targetPeople:
+      "B2B SaaS founders, former operators, revenue leaders, and event moderators with category visibility.",
+    targetCompanies:
+      "Vertical SaaS, workflow automation, sales tooling, pricing infrastructure, and founder-led operator tools.",
+    deliverables:
+      "Structured report, category map, founder lead list, permitted media, and suggested follow-up questions.",
+    permittedMediaNotes:
+      "Public stage and sponsor booth media only. Do not record private attendee conversations.",
+    createdAt: "2026-06-23T17:20:00.000Z",
+    applicants: 0,
+    source: "mock",
   },
 ];
 
