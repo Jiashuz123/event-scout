@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const steps = [
   {
     title: "Post a coverage request",
@@ -19,7 +21,7 @@ const steps = [
 const deliverables = [
   "Executive event summary",
   "Founder and company leads",
-  "Conversation notes",
+  "Conversation summaries",
   "Permitted photos and videos",
   "Referral opportunities",
   "Suggested follow-up messages",
@@ -39,9 +41,12 @@ export default function Home() {
             <a href="#deliverables" className="hover:text-white">
               Deliverables
             </a>
-            <a href="#trust" className="hover:text-white">
-              Trust
-            </a>
+            <Link href="/investor" className="hover:text-white">
+              Investor dashboard
+            </Link>
+            <Link href="/scout" className="hover:text-white">
+              Scout dashboard
+            </Link>
           </div>
 
           <a
@@ -65,24 +70,24 @@ export default function Home() {
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
               EventScout helps investors hire trusted local scouts to attend
               startup events, demo days, conferences, and meetups on their
-              behalf. Get structured notes, qualified leads, permitted media,
+              behalf. Get structured reports, qualified leads, permitted media,
               and warm follow-up opportunities without taking another flight.
             </p>
 
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <a
-                href="#waitlist"
+              <Link
+                href="/investor/requests/new"
                 className="rounded-full bg-white px-8 py-4 text-center font-semibold text-slate-950 hover:bg-slate-200"
               >
                 Post an event brief
-              </a>
+              </Link>
 
-              <a
-                href="#scouts"
+              <Link
+                href="/scout/onboarding"
                 className="rounded-full border border-slate-700 px-8 py-4 text-center font-semibold text-white hover:bg-slate-900"
               >
                 Become a scout
-              </a>
+              </Link>
             </div>
 
             <div className="mt-12 grid max-w-xl grid-cols-3 gap-6 border-t border-slate-800 pt-8">
