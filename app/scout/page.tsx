@@ -1,3 +1,7 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import {
   Badge,
   ButtonLink,
@@ -7,8 +11,27 @@ import {
   WorkspaceShell,
 } from "@/app/_components/workspace";
 import { assignedBookings, openScoutRequests } from "@/app/_data/mock";
+import {
+  formatRequestDate,
+  getDemoCoverageRequests,
+  type CoverageRequest,
+} from "@/app/_lib/demo-store";
 
 export default function ScoutDashboard() {
+  const [demoRequests, setDemoRequests] = useState<CoverageRequest[]>([]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDemoRequests(
+        getDemoCoverageRequests().filter((request) => request.status === "open"),
+      );
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  const availableRequestCount = demoRequests.length + openScoutRequests.length;
+
   return (
     <WorkspaceShell
       eyebrow="Scout dashboard"
@@ -19,12 +42,12 @@ export default function ScoutDashboard() {
       <div className="grid gap-5 md:grid-cols-3">
         <StatCard
           label="Available requests"
-          value="14"
-          detail="Three strong matches based on your mock profile industries."
+          value={String(availableRequestCount)}
+          detail={`${demoRequests.length} browser-saved requests and ${openScoutRequests.length} mock matches.`}
         />
         <StatCard
           label="Assigned bookings"
-          value="2"
+          value={String(assignedBookings.length)}
           detail="One active event brief and one structured report revision."
         />
         <StatCard
@@ -34,32 +57,84 @@ export default function ScoutDashboard() {
         />
       </div>
 
+      {demoRequests.length === 0 ? (
+        <Card className="mt-6">
+          <p className="font-semibold">No browser-saved open requests yet.</p>
+          <p className="mt-2 text-sm leading-6 text-slate-400">
+            Submit the investor coverage request form to add a new open request
+            above the mock scout marketplace.
+          </p>
+        </Card>
+      ) : null}
+
       <section className="mt-10">
         <SectionTitle eyebrow="Marketplace" title="Open coverage requests" />
-        <div className="grid gap-5 lg:grid-cols-3">
-          {openScoutRequests.map((request) => (
-            <Card key={request.title}>
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-xl font-bold">{request.title}</h3>
-                  <p className="mt-2 text-sm text-slate-400">
-                    {request.city} · {request.date}
-                  </p>
+        {availableRequestCount > 0 ? (
+          <div className="grid gap-5 lg:grid-cols-3">
+            {demoRequests.map((request) => (
+              <Card key={request.id}>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-xl font-bold">
+                      <Link
+                        href={`/investor/requests/${request.id}`}
+                        className="hover:text-slate-300"
+                      >
+                        {request.title}
+                      </Link>
+                    </h3>
+                    <p className="mt-2 text-sm text-slate-400">
+                      {request.city} - {formatRequestDate(request.date)}
+                    </p>
+                  </div>
+                  <Badge tone="green">{request.budget}</Badge>
                 </div>
-                <Badge tone="green">{request.fee}</Badge>
-              </div>
-              <p className="mt-5 text-sm leading-6 text-slate-300">
-                {request.fit}
-              </p>
-              <button
-                type="button"
-                className="mt-6 rounded-full border border-slate-700 px-5 py-3 text-sm font-semibold hover:bg-slate-800"
-              >
-                View brief
-              </button>
-            </Card>
-          ))}
-        </div>
+                <p className="mt-5 text-sm leading-6 text-slate-300">
+                  {request.missionBrief}
+                </p>
+                <div className="mt-6 flex items-center justify-between gap-3">
+                  <Badge tone="green">Demo saved</Badge>
+                  <Link
+                    href={`/investor/requests/${request.id}`}
+                    className="text-sm font-semibold hover:text-slate-300"
+                  >
+                    View brief
+                  </Link>
+                </div>
+              </Card>
+            ))}
+
+            {openScoutRequests.map((request) => (
+              <Card key={request.title}>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-xl font-bold">{request.title}</h3>
+                    <p className="mt-2 text-sm text-slate-400">
+                      {request.city} - {request.date}
+                    </p>
+                  </div>
+                  <Badge tone="green">{request.fee}</Badge>
+                </div>
+                <p className="mt-5 text-sm leading-6 text-slate-300">
+                  {request.fit}
+                </p>
+                <button
+                  type="button"
+                  className="mt-6 rounded-full border border-slate-700 px-5 py-3 text-sm font-semibold hover:bg-slate-800"
+                >
+                  View brief
+                </button>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <p className="font-semibold">No open coverage requests right now.</p>
+            <p className="mt-2 text-sm text-slate-400">
+              New investor requests will appear here when they are saved.
+            </p>
+          </Card>
+        )}
       </section>
 
       <section className="mt-10">
@@ -72,26 +147,35 @@ export default function ScoutDashboard() {
             </ButtonLink>
           }
         />
-        <div className="grid gap-5 md:grid-cols-2">
-          {assignedBookings.map((booking) => (
-            <Card key={booking.title}>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div>
-                  <h3 className="text-xl font-bold">{booking.title}</h3>
-                  <p className="mt-2 text-sm text-slate-400">
-                    Investor: {booking.investor}
-                  </p>
+        {assignedBookings.length > 0 ? (
+          <div className="grid gap-5 md:grid-cols-2">
+            {assignedBookings.map((booking) => (
+              <Card key={booking.title}>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <h3 className="text-xl font-bold">{booking.title}</h3>
+                    <p className="mt-2 text-sm text-slate-400">
+                      Investor: {booking.investor}
+                    </p>
+                  </div>
+                  <Badge tone={booking.status.includes("Revision") ? "amber" : "blue"}>
+                    {booking.status}
+                  </Badge>
                 </div>
-                <Badge tone={booking.status.includes("Revision") ? "amber" : "blue"}>
-                  {booking.status}
-                </Badge>
-              </div>
-              <p className="mt-5 text-sm leading-6 text-slate-300">
-                {booking.due}
-              </p>
-            </Card>
-          ))}
-        </div>
+                <p className="mt-5 text-sm leading-6 text-slate-300">
+                  {booking.due}
+                </p>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <p className="font-semibold">No assigned bookings yet.</p>
+            <p className="mt-2 text-sm text-slate-400">
+              Accepted assignments will appear in this section.
+            </p>
+          </Card>
+        )}
       </section>
     </WorkspaceShell>
   );

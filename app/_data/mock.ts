@@ -1,36 +1,77 @@
-export const activeCoverageRequests = [
+import type { CoverageRequest } from "@/app/_lib/demo-store";
+
+export const activeCoverageRequests: CoverageRequest[] = [
   {
+    id: "mock-ai-infrastructure-demo-night",
     title: "AI Infrastructure Demo Night",
-    event: "Frontier Builders SF",
+    eventName: "Frontier Builders SF",
+    eventUrl: "https://example.com/frontier-builders-sf",
     city: "San Francisco",
-    date: "July 16, 2026",
+    venue: "South Park Commons",
+    date: "2026-07-16",
     budget: "$650 fixed fee",
-    status: "Scout review",
-    mission:
+    status: "scout_review",
+    missionBrief:
       "Identify seed-stage infrastructure founders with developer traction and credible technical depth.",
+    targetPeople:
+      "Technical founders, developer relations leads, and organizers with visibility into standout teams.",
+    targetCompanies:
+      "AI observability, model evaluation, inference optimization, and developer workflow startups.",
+    deliverables:
+      "Structured report, ranked founder leads, permitted media, and permissioned warm introduction opportunities.",
+    permittedMediaNotes:
+      "Public demo tables only. Ask founders before capturing slides, product screens, or private conversations.",
+    createdAt: "2026-06-27T16:00:00.000Z",
     applicants: 7,
+    source: "mock",
   },
   {
+    id: "mock-climate-hardware-founder-salon",
     title: "Climate Hardware Founder Salon",
-    event: "Bay Area Climate Week",
+    eventName: "Bay Area Climate Week",
+    eventUrl: "https://example.com/bay-area-climate-week",
     city: "Oakland",
-    date: "July 22, 2026",
+    venue: "Oakland Climate Lab",
+    date: "2026-07-22",
     budget: "$800 fixed fee",
-    status: "Booked",
-    mission:
+    status: "booked",
+    missionBrief:
       "Find founders building manufacturing, grid, or industrial decarbonization companies.",
+    targetPeople:
+      "Hardware founders, industrial operators, climate investors, and technical advisors.",
+    targetCompanies:
+      "Grid resilience, industrial heat, manufacturing automation, and carbon accounting hardware companies.",
+    deliverables:
+      "Structured report, 6 company profiles, permitted media, and investor follow-up recommendations.",
+    permittedMediaNotes:
+      "Confirm permission before photographing prototypes or facility diagrams.",
+    createdAt: "2026-06-26T18:30:00.000Z",
     applicants: 3,
+    source: "mock",
   },
   {
+    id: "mock-nyc-fintech-operator-meetup",
     title: "NYC Fintech Operator Meetup",
-    event: "Empire Fintech Forum",
+    eventName: "Empire Fintech Forum",
+    eventUrl: "https://example.com/empire-fintech-forum",
     city: "New York",
-    date: "August 5, 2026",
+    venue: "Union Square Ventures event space",
+    date: "2026-08-05",
     budget: "$575 fixed fee",
-    status: "Draft brief",
-    mission:
+    status: "draft",
+    missionBrief:
       "Capture operator-led fintech startups with bank partnerships or compliance automation angles.",
+    targetPeople:
+      "Former fintech operators, bank partnership leads, compliance founders, and seed-stage CEOs.",
+    targetCompanies:
+      "Regtech, payments infrastructure, lending workflow, and embedded finance companies.",
+    deliverables:
+      "Structured report, lead list, target company summary, and suggested follow-up messages.",
+    permittedMediaNotes:
+      "No private attendee list capture. Public stage and sponsor booth media only.",
+    createdAt: "2026-06-25T20:15:00.000Z",
     applicants: 0,
+    source: "mock",
   },
 ];
 
